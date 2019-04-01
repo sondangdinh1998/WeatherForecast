@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:showIn="navigation_view">
+    <item
+        android:title="Temperature"
+        app:showAsAction="always"/>
+
+    <item android:title="Authors">
+        <menu>
+            <item
+                android:id="@+id/hoang_the_son"
+                android:title="Hoàng Thế Sơn"/>
+            <item
+                android:id="@+id/dang_dinh_son"
+                android:title="Đặng Đình Sơn"/>
+        </menu>
+    </item>
+
+</menu>
