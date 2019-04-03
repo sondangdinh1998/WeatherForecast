@@ -1,20 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
-    <item
-        android:title="Temperature"
-        app:showAsAction="always"/>
-
-    <item android:title="Authors">
+    <item android:title="Settings">
         <menu>
             <item
-                android:id="@+id/hoang_the_son"
-                android:title="Hoàng Thế Sơn"/>
+                android:title="Temperature"
+                app:actionLayout="@layout/change_temperature"
+                app:showAsAction="always">
+            </item>
             <item
-                android:id="@+id/dang_dinh_son"
-                android:title="Đặng Đình Sơn"/>
+                android:title="Notification"
+                app:actionLayout="@layout/switch_layout"
+                app:showAsAction="always"/>
+            <item
+                android:title="Language"
+                app:actionLayout="@layout/language"
+                app:showAsAction="always"
+                />
+        </menu>
+
+    </item>
+
+    <item android:title="About">
+        <menu>
+            <item
+                android:icon="@drawable/ic_person_black_24dp"
+                android:id="@+id/authors"
+                android:title="Authors"/>
         </menu>
     </item>
 
