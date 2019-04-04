@@ -1,10 +1,13 @@
 package com.android.learning.weatherforecast.activities;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -19,6 +22,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.learning.weatherforecast.R;
+import com.android.learning.weatherforecast.models.Weather;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -28,6 +36,7 @@ public class MainActivity extends AppCompatActivity
     private ActionBarDrawerToggle toggle;
     private NavigationView navigationView;
 
+    private Weather todayWeather = new Weather();
 
     private TextView todayTemperature;
     private TextView todayDescription;
@@ -36,11 +45,19 @@ public class MainActivity extends AppCompatActivity
     private TextView todayHumidity;
     private TextView todaySunrise;
     private TextView todaySunset;
-    private TextView todayUvIndex;
     private TextView lastUpdate;
     private ImageView todayIcon;
     private ViewPager viewPager;
     private TabLayout tabLayout;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private View appView;
+
+    private List<Weather> longTermTodayWeahter = new ArrayList<>();
+    private List<Weather> longTermTomorrowWeahter = new ArrayList<>();
+    private List<Weather> longTermLaterWeahter = new ArrayList<>();
+
+    public String recentCityId = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,10 +74,25 @@ public class MainActivity extends AppCompatActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
+
+        // Khởi tạo các textview
+        todayTemperature = findViewById(R.id.todayTemperature);
+        todayDescription = findViewById(R.id.todayDescription);
+        todayWind = findViewById(R.id.todayWind);
+        todayPressure = findViewById(R.id.todayPressure);
+        todayHumidity = findViewById(R.id.todayHumidity);
+        todaySunrise = findViewById(R.id.todaySunrise);
+        todaySunset = findViewById(R.id.todaySunset);
+        todayIcon = findViewById(R.id.todayIcon);
+
         viewPager = findViewById(R.id.viewPager);
         tabLayout = findViewById(R.id.tabs);
 
         tabLayout.setupWithViewPager(viewPager);
+
+        // Load trước dữ liệu
+
     }
 
     @Override
@@ -118,5 +150,16 @@ public class MainActivity extends AppCompatActivity
 //        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 //        drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void preloadWeather() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        String lastToday = sp.getString("lastToday", "");
+    }
+
+    public static long saveLastUpdateTime(SharedPreferences sp) {
+        Calendar now = Calendar.getInstance();
+        sp.edit().putLong("lastUpdate", now.getTimeInMillis()).commit();
+        return now.getTimeInMillis();
     }
 }

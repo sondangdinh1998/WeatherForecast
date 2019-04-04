@@ -5,8 +5,8 @@
 
     <RadioGroup
         android:id="@+id/change_temperature"
-        android:layout_width="50dp"
-        android:layout_height="20dp"
+        android:layout_width="80dp"
+        android:layout_height="25dp"
         android:layout_gravity="center_vertical"
         android:background="@drawable/radio_background_border"
         android:orientation="horizontal">
