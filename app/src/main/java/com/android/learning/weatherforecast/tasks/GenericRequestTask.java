@@ -35,7 +35,7 @@ public abstract class GenericRequestTask extends AsyncTask<String, String, TaskO
     @Override
     protected void onPreExecute() {
         loading++;
-        if(!progressDialog.isShowing()) {
+        if (!progressDialog.isShowing()) {
             progressDialog.setMessage("Downloading your data ...");
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.show();
@@ -48,16 +48,16 @@ public abstract class GenericRequestTask extends AsyncTask<String, String, TaskO
         String response = "";
         String[] reqParams = new String[]{};
 
-        if(params!=null && params.length>0) {
-            if(params[0].equals("cachedResponse")) {
+        if (params != null && params.length > 0) {
+            if (params[0].equals("cachedResponse")) {
                 response = params[1];
                 // Không làm gì trong trường hợp này
                 output.taskResult = TaskResult.SUCCESS;
-            } else if(params[0].equals("coords")) {
+            } else if (params[0].equals("coords")) {
                 String lat = params[1];
                 String lon = params[2];
                 reqParams = new String[]{"coords", lat, lon};
-            } else  if(params[0].equals("city")) {
+            } else if (params[0].equals("city")) {
                 reqParams = new String[]{"city", params[1]};
             }
         }
@@ -112,7 +112,7 @@ public abstract class GenericRequestTask extends AsyncTask<String, String, TaskO
 
     @Override
     protected void onPostExecute(TaskOutput taskOutput) {
-        if(loading==1)
+        if (loading == 1)
             progressDialog.dismiss();
         loading--;
         handleTaskOutput(taskOutput);
@@ -122,9 +122,9 @@ public abstract class GenericRequestTask extends AsyncTask<String, String, TaskO
         switch (output.taskResult) {
             case SUCCESS: {
                 ParseResult parseResult = output.parseResult;
-                if(ParseResult.CITY_NOT_FOUND.equals(parseResult)) {
+                if (ParseResult.CITY_NOT_FOUND.equals(parseResult)) {
                     Snackbar.make(activity.findViewById(android.R.id.content), "Không tìm thấy thành phố", Snackbar.LENGTH_LONG).show();
-                } else if(ParseResult.JSON_EXCEPTION.equals(parseResult)) {
+                } else if (ParseResult.JSON_EXCEPTION.equals(parseResult)) {
                     Snackbar.make(activity.findViewById(android.R.id.content), "Lỗi parse JSON", Snackbar.LENGTH_LONG).show();
                 }
                 break;
@@ -146,36 +146,33 @@ public abstract class GenericRequestTask extends AsyncTask<String, String, TaskO
 
     /**
      * Tạo URL để gọi api từ openweathermap
+     *
      * @param reqParams các thông số của request
      * @return URL
      * @throws UnsupportedEncodingException bắt ngoại lệ
-     * @throws MalformedURLException bắt ngoại lệ
+     * @throws MalformedURLException        bắt ngoại lệ
      */
     private URL provideURL(String[] reqParams) throws UnsupportedEncodingException, MalformedURLException {
-        try {
-            String apiKey = "b4eefd81f07962985a467d1faf199755";
+        String apiKey = "b4eefd81f07962985a467d1faf199755";
 
-            StringBuilder urlBuilder = new StringBuilder("https://api.openweathermap.org/data/2.5/");
-            urlBuilder.append(getAPIName()).append("?");
-            if(reqParams.length>0) {
-                final  String zeroParam = reqParams[0];
-                if(reqParams[0].equals("city")) { // theo tên thành phố
-                    urlBuilder.append("q=").append(reqParams[1]);
-                } else if(reqParams[0].equals("coords")) { // theo toạ độ
-                    urlBuilder.append("lat=").append(reqParams[1]).append("&lon=").append(reqParams[2]);
-                }
-            } else {
-                urlBuilder.append("id=1581130");
-
+        StringBuilder urlBuilder = new StringBuilder("https://api.openweathermap.org/data/2.5/");
+        urlBuilder.append(getAPIName()).append("?");
+        if (reqParams.length > 0) {
+            final String zeroParam = reqParams[0];
+            if (reqParams[0].equals("city")) { // theo tên thành phố
+                urlBuilder.append("q=").append(reqParams[1]);
+            } else if (reqParams[0].equals("coords")) { // theo toạ độ
+                urlBuilder.append("lat=").append(reqParams[1]).append("&lon=").append(reqParams[2]);
             }
-            urlBuilder.append("&lang=vi");
-            urlBuilder.append("&mode=json");
-            urlBuilder.append("&appid=").append(apiKey);
-            return new URL(urlBuilder.toString());
-        } catch (Exception e) {
-            e.fillInStackTrace();
-            return null;
+        } else {
+            urlBuilder.append("id=1581130");
+
         }
+        urlBuilder.append("&lang=vi");
+        urlBuilder.append("&mode=json");
+        urlBuilder.append("&appid=").append(apiKey);
+        return new URL(urlBuilder.toString());
+
     }
 
     private static void close(Closeable x) {
@@ -192,7 +189,7 @@ public abstract class GenericRequestTask extends AsyncTask<String, String, TaskO
         if (!TextUtils.isEmpty(activity.recentCityId)) {
             SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
             editor.putString("cityId", activity.recentCityId);
-            editor.apply();
+            editor.commit();
             activity.recentCityId = "";
         }
     }
